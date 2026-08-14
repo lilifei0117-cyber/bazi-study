@@ -57,14 +57,14 @@
           <dl class="lifetime-stats" aria-label="累计学习数据">
             <div><dt>累计作答</dt><dd id="lifetimeAnswered">0</dd></div>
             <div><dt>累计正确率</dt><dd id="lifetimeAccuracy">0%</dd></div>
-            <div><dt>已掌握</dt><dd><span id="masteredCount">0</span><small id="totalBankCount"> / 250</small></dd></div>
+            <div><dt>已掌握</dt><dd><span id="masteredCount">0</span><small id="totalBankCount"> / 320</small></dd></div>
           </dl>
         </header>
 
         <section class="category-section" aria-labelledby="categoryHeading">
           <div class="category-title-row">
             <h2 id="categoryHeading">知识分类</h2>
-            <span id="categoryCount">250 题</span>
+            <span id="categoryCount">320 题</span>
           </div>
           <div class="category-tabs" id="categoryTabs">
             <button type="button" class="is-active" data-category="all" aria-pressed="true">全部</button>
@@ -84,8 +84,8 @@
           <div class="study-main">
             <section id="quizView" aria-labelledby="questionText">
               <div class="progress-row">
-                <span id="questionCounter">第 1 / 250 题</span>
-                <div class="progress-track" id="progressTrack" role="progressbar" aria-label="本轮进度" aria-valuemin="0" aria-valuemax="250" aria-valuenow="1">
+                <span id="questionCounter">第 1 / 320 题</span>
+                <div class="progress-track" id="progressTrack" role="progressbar" aria-label="本轮进度" aria-valuemin="0" aria-valuemax="320" aria-valuenow="1">
                   <span id="progressFill"></span>
                 </div>
                 <span id="progressPercent">1%</span>
@@ -178,6 +178,7 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
     <script src="questions.js"></script>
+    <script src="questions-extra.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
