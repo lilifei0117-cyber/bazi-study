@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#17221f" />
+    <title>知序 · 八字基础刷题</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#questionText">跳到当前题目</a>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="练习导航">
+        <div class="brand-row">
+          <div class="brand-seal" aria-hidden="true">序</div>
+          <div class="brand-copy">
+            <strong>知序</strong>
+            <span>八字基础刷题</span>
+          </div>
+        </div>
+
+        <nav class="mode-nav" id="modeNav" aria-label="练习模式">
+          <button class="mode-button is-active" type="button" data-mode="order" aria-pressed="true">
+            <span>顺序练习</span><small>按知识脉络学习</small>
+          </button>
+          <button class="mode-button" type="button" data-mode="random" aria-pressed="false">
+            <span>随机十题</span><small>快速检验掌握度</small>
+          </button>
+          <button class="mode-button" type="button" data-mode="wrong" aria-pressed="false">
+            <span>错题重练</span><small id="wrongModeCount">暂无错题</small>
+          </button>
+          <button class="mode-button" type="button" data-mode="exam" aria-pressed="false">
+            <span>模拟考试</span><small>随机二十五题</small>
+          </button>
+        </nav>
+
+        <figure class="element-figure">
+          <canvas id="elementWheel" width="260" height="260" role="img" aria-label="五行相生相克与十天干关系图"></canvas>
+          <figcaption>五行与十天干速览</figcaption>
+        </figure>
+
+        <div class="data-tools" aria-label="学习记录工具">
+          <button type="button" id="exportBtn">导出记录</button>
+          <label class="file-button" for="importInput">导入记录</label>
+          <input id="importInput" type="file" accept="application/json,.json" />
+          <button type="button" id="resetBtn">清空记录</button>
+        </div>
+        <p class="scope-note">内容用于传统文化中的固定知识表与基础推导练习，不提供命运预测，也不作为医疗、法律或投资建议。</p>
+      </aside>
+
+      <main class="main" id="mainContent">
+        <header class="topbar">
+          <div>
+            <p class="overline" id="modeEyebrow">顺序练习 · 全部题目</p>
+            <h1 id="pageHeading">今天从哪一条规则开始？</h1>
+          </div>
+          <dl class="lifetime-stats" aria-label="累计学习数据">
+            <div><dt>累计作答</dt><dd id="lifetimeAnswered">0</dd></div>
+            <div><dt>累计正确率</dt><dd id="lifetimeAccuracy">0%</dd></div>
+            <div><dt>已掌握</dt><dd><span id="masteredCount">0</span><small id="totalBankCount"> / 250</small></dd></div>
+          </dl>
+        </header>
+
+        <section class="category-section" aria-labelledby="categoryHeading">
+          <div class="category-title-row">
+            <h2 id="categoryHeading">知识分类</h2>
+            <span id="categoryCount">250 题</span>
+          </div>
+          <div class="category-tabs" id="categoryTabs">
+            <button type="button" class="is-active" data-category="all" aria-pressed="true">全部</button>
+            <button type="button" data-category="tiangan" aria-pressed="false">天干</button>
+            <button type="button" data-category="dizhi" aria-pressed="false">地支</button>
+            <button type="button" data-category="wuxing" aria-pressed="false">五行</button>
+            <button type="button" data-category="shishen" aria-pressed="false">十神</button>
+            <button type="button" data-category="hechong" aria-pressed="false">合冲刑害</button>
+            <button type="button" data-category="canggan" aria-pressed="false">藏干</button>
+            <button type="button" data-category="paipan" aria-pressed="false">排盘</button>
+            <button type="button" data-category="relation" aria-pressed="false">关系判断</button>
+            <button type="button" data-category="zonghe" aria-pressed="false">综合</button>
+          </div>
+        </section>
+
+        <div class="study-layout">
+          <div class="study-main">
+            <section id="quizView" aria-labelledby="questionText">
+              <div class="progress-row">
+                <span id="questionCounter">第 1 / 250 题</span>
+                <div class="progress-track" id="progressTrack" role="progressbar" aria-label="本轮进度" aria-valuemin="0" aria-valuemax="250" aria-valuenow="1">
+                  <span id="progressFill"></span>
+                </div>
+                <span id="progressPercent">1%</span>
+              </div>
+
+              <article class="question-card">
+                <div class="question-meta">
+                  <span id="questionCategory">五行</span>
+                  <span class="question-meta-detail"><span id="questionKnowledge">五行相生</span><span class="question-type" id="questionType">单选</span></span>
+                </div>
+                <h2 id="questionText">题目加载中</h2>
+                <div class="options" id="options" role="group" aria-labelledby="questionText"></div>
+
+                <section class="feedback" id="feedback" aria-live="polite" hidden>
+                  <div class="feedback-heading">
+                    <span class="feedback-mark" id="feedbackMark" aria-hidden="true"></span>
+                    <div><strong id="feedbackTitle"></strong><span id="feedbackAnswer"></span></div>
+                  </div>
+                  <div class="explanation-grid">
+                    <div><span>规则</span><p id="feedbackRule"></p></div>
+                    <div><span>推导</span><p id="feedbackExplanation"></p></div>
+                  </div>
+                </section>
+
+                <footer class="question-actions">
+                  <p id="selectionStatus" aria-live="polite">请选择一个答案</p>
+                  <button class="primary-action" id="submitBtn" type="button" disabled>确认答案</button>
+                  <button class="primary-action" id="nextBtn" type="button" hidden>下一题</button>
+                </footer>
+              </article>
+            </section>
+
+            <section class="empty-state" id="emptyState" hidden aria-labelledby="emptyTitle">
+              <div class="empty-seal" aria-hidden="true">清</div>
+              <p class="overline">错题重练</p>
+              <h2 id="emptyTitle">这一分类没有待复习的错题</h2>
+              <p>新的错题会自动收入这里；答对后会从当前错题集中移除。</p>
+              <button class="primary-action" type="button" data-empty-action="random">随机练十题</button>
+            </section>
+
+            <section class="result-view" id="resultView" hidden aria-labelledby="resultTitle">
+              <div class="result-hero">
+                <div class="result-score"><strong id="resultPercent">0</strong><span>分</span></div>
+                <div><p class="overline" id="resultMode">本轮完成</p><h2 id="resultTitle">练习结果</h2><p id="resultSummary"></p></div>
+              </div>
+              <div class="result-breakdown" id="resultBreakdown" aria-label="分类成绩"></div>
+              <div class="review-section" id="reviewSection">
+                <div class="review-heading"><h3>错题回看</h3><span id="reviewCount"></span></div>
+                <div id="reviewList"></div>
+              </div>
+              <div class="result-actions">
+                <button type="button" id="retryWrongBtn">重练本轮错题</button>
+                <button class="primary-action" type="button" id="restartBtn">再来一组</button>
+              </div>
+            </section>
+          </div>
+
+          <aside class="study-aside" aria-label="本轮学习概况">
+            <section>
+              <div class="aside-heading"><h2>本轮</h2><span id="sessionStatus">进行中</span></div>
+              <dl class="session-stats">
+                <div><dt>已作答</dt><dd id="sessionAnswered">0</dd></div>
+                <div><dt>答对</dt><dd id="sessionCorrect">0</dd></div>
+                <div><dt>正确率</dt><dd id="sessionAccuracy">0%</dd></div>
+              </dl>
+            </section>
+            <section class="mastery-section">
+              <div class="aside-heading"><h2>分类掌握</h2><span>连续答对 2 次</span></div>
+              <div class="mastery-list" id="masteryList"></div>
+            </section>
+            <section class="reference-note">
+              <span>十神判断顺序</span>
+              <p>先看五行生克，再看与日主的阴阳同异。十神始终以日干为基准。</p>
+            </section>
+          </aside>
+        </div>
+      </main>
+    </div>
+
+    <dialog id="resetDialog">
+      <form method="dialog">
+        <h2>清空学习记录？</h2>
+        <p>错题、掌握状态和累计数据都会删除，题库本身不受影响。</p>
+        <div class="dialog-actions">
+          <button value="cancel">取消</button>
+          <button class="danger-action" id="confirmResetBtn" value="confirm">确认清空</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
